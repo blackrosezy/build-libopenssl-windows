@@ -93,10 +93,11 @@ REM Extract downloaded zip file to tmp_openssl
 REM Static Release version
 cd tmp_openssl\openssl*
 
-if %COMPILER_VER% == "6" goto vc6
-perl Configure VC-WIN32 no-asm --prefix=openssl-release-static
-:vc6
+if %COMPILER_VER% == "6" (
 perl Configure VC-WIN32 no-asm -DOPENSSL_USE_IPV6=0 --prefix=openssl-release-static
+) else (
+perl Configure VC-WIN32 no-asm --prefix=openssl-release-static
+)
 
 call ms\do_ms.bat
 nmake -f ms/nt.mak
@@ -113,10 +114,11 @@ cd %ROOT_DIR%
 REM DLL Release version
 cd tmp_openssl\openssl*
 
-if %COMPILER_VER% == "6" goto vc6
-perl Configure VC-WIN32 no-asm enable-static-engine --prefix=openssl-release-dll
-:vc6
+if %COMPILER_VER% == "6" (
 perl Configure VC-WIN32 no-asm enable-static-engine -DOPENSSL_USE_IPV6=0 --prefix=openssl-release-dll
+) else (
+perl Configure VC-WIN32 no-asm enable-static-engine --prefix=openssl-release-dll
+)
 
 call ms\do_ms.bat
 nmake -f ms/ntdll.mak
@@ -133,10 +135,11 @@ cd %ROOT_DIR%
 REM Static Debug version
 cd tmp_openssl\openssl*
 
-if %COMPILER_VER% == "6" goto vc6
-perl Configure debug-VC-WIN32 no-asm --prefix=openssl-debug-static
-:vc6
+if %COMPILER_VER% == "6" (
 perl Configure debug-VC-WIN32 no-asm -DOPENSSL_USE_IPV6=0 --prefix=openssl-debug-static
+) else (
+perl Configure debug-VC-WIN32 no-asm --prefix=openssl-debug-static
+)
 
 call ms\do_ms.bat
 nmake -f ms/nt.mak
@@ -152,10 +155,11 @@ REM DLL Debug version
 %SEVEN_ZIP% x openssl.tar -y -otmp_openssl | FIND /V "ing  " | FIND /V "Igor Pavlov"
 cd tmp_openssl\openssl*
 
-if %COMPILER_VER% == "6" goto vc6
-perl Configure debug-VC-WIN32 no-asm enable-static-engine --prefix=openssl-debug-dll
-:vc6
+if %COMPILER_VER% == "6" (
 perl Configure debug-VC-WIN32 no-asm enable-static-engine -DOPENSSL_USE_IPV6=0 --prefix=openssl-debug-dll
+) else (
+perl Configure debug-VC-WIN32 no-asm enable-static-engine --prefix=openssl-debug-dll
+)
 
 call ms\do_ms.bat
 nmake -f ms/ntdll.mak
