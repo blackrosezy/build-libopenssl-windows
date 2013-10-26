@@ -92,7 +92,12 @@ REM Extract downloaded zip file to tmp_openssl
 
 REM Static Release version
 cd tmp_openssl\openssl*
+
+if %COMPILER_VER% == "6" goto vc6
 perl Configure VC-WIN32 no-asm --prefix=openssl-release-static
+:vc6
+perl Configure VC-WIN32 no-asm -DOPENSSL_USE_IPV6=0 --prefix=openssl-release-static
+
 call ms\do_ms.bat
 nmake -f ms/nt.mak
 nmake -f ms/nt.mak install
@@ -107,14 +112,18 @@ cd %ROOT_DIR%
 
 REM DLL Release version
 cd tmp_openssl\openssl*
-perl Configure VC-WIN32 no-asm --prefix=openssl-release-dll
+
+if %COMPILER_VER% == "6" goto vc6
+perl Configure VC-WIN32 no-asm enable-static-engine --prefix=openssl-release-dll
+:vc6
+perl Configure VC-WIN32 no-asm enable-static-engine -DOPENSSL_USE_IPV6=0 --prefix=openssl-release-dll
+
 call ms\do_ms.bat
 nmake -f ms/ntdll.mak
 nmake -f ms/ntdll.mak install
 
 %MKDIR% -p %ROOT_DIR%\third-party\libopenssl\lib\dll-release
 %CP% openssl-release-dll\lib\*.lib %ROOT_DIR%\third-party\libopenssl\lib\dll-release
-%CP% -rf openssl-release-dll\lib\engines %ROOT_DIR%\third-party\libopenssl\lib\dll-release
 %CP% openssl-release-dll\bin\*.dll %ROOT_DIR%\third-party\libopenssl\lib\dll-release
 
 cd %ROOT_DIR%
@@ -123,7 +132,12 @@ cd %ROOT_DIR%
 
 REM Static Debug version
 cd tmp_openssl\openssl*
+
+if %COMPILER_VER% == "6" goto vc6
 perl Configure debug-VC-WIN32 no-asm --prefix=openssl-debug-static
+:vc6
+perl Configure debug-VC-WIN32 no-asm -DOPENSSL_USE_IPV6=0 --prefix=openssl-debug-static
+
 call ms\do_ms.bat
 nmake -f ms/nt.mak
 nmake -f ms/nt.mak install
@@ -137,14 +151,18 @@ cd %ROOT_DIR%
 REM DLL Debug version
 %SEVEN_ZIP% x openssl.tar -y -otmp_openssl | FIND /V "ing  " | FIND /V "Igor Pavlov"
 cd tmp_openssl\openssl*
-perl Configure debug-VC-WIN32 no-asm --prefix=openssl-debug-dll
+
+if %COMPILER_VER% == "6" goto vc6
+perl Configure debug-VC-WIN32 no-asm enable-static-engine --prefix=openssl-debug-dll
+:vc6
+perl Configure debug-VC-WIN32 no-asm enable-static-engine -DOPENSSL_USE_IPV6=0 --prefix=openssl-debug-dll
+
 call ms\do_ms.bat
 nmake -f ms/ntdll.mak
 nmake -f ms/ntdll.mak install
 
 %MKDIR% -p %ROOT_DIR%\third-party\libopenssl\lib\dll-debug
 %CP% openssl-debug-dll\lib\*.lib %ROOT_DIR%\third-party\libopenssl\lib\dll-debug
-%CP% -rf openssl-debug-dll\lib\engines %ROOT_DIR%\third-party\libopenssl\lib\dll-debug
 %CP% openssl-debug-dll\bin\*.dll %ROOT_DIR%\third-party\libopenssl\lib\dll-debug
 
 cd %ROOT_DIR%
