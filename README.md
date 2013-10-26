@@ -4,7 +4,7 @@ Auto download & compile openssl
 This batch script will automatically download the latest openssl source code and build it using Visual Studio compiler.
 
 Supported Visual Studio are:
-*  Visual C++ 6 (require Windows Server 2003 Platform SDK released in February 2003)
+*  Visual C++ 6 (IPV6 not supported, -DOPENSSL_USE_IPV6=0 )
 *  Visual Studio 2005
 *  Visual Studio 2008
 *  Visual Studio 2010
